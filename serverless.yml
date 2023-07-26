@@ -1,0 +1,44 @@
+service: ServiceDesafioRipley
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-typescript
+  - serverless-offline
+
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1 
+  timeout: 120
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_PORT: ${env:DB_PORT}
+    DB_USERNAME: ${env:DB_USERNAME}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+
+functions:
+  app:
+    handler: src/lambda.handler
+    events:
+      - http:
+          method: any
+          path: /{any+}
+          cors: true
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+    useChildProcesses: true
+
+  cors-headers:
+    origin: '*'
+    headers:
+      - Content-Type
+      - Access-Control-Allow-Headers
+      - Access-Control-Allow-Origin
+    allowCredentials: false
