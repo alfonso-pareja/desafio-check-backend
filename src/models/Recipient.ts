@@ -1,7 +1,7 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement, UpdatedAt, DeletedAt, CreatedAt } from 'sequelize-typescript';
 import { User } from './User';
 
-@Table({ tableName: 'RECIPIENTS', timestamps: false })
+@Table({ tableName: 'RECIPIENTS', timestamps: true })
 export class Recipient extends Model {
   @PrimaryKey
   @AutoIncrement
@@ -20,4 +20,13 @@ export class Recipient extends Model {
 
   @Column({field: 'recipient_account_number', type: DataType.STRING})
   recipientAccountNumber!: string;
+
+  @UpdatedAt
+  updated!: Date;
+  
+  @CreatedAt
+  created!: Date;
+
+  @DeletedAt
+  deleted!: Date;
 }

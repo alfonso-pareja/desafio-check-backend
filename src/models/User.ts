@@ -1,6 +1,6 @@
-import { Table, Column, Model, PrimaryKey, DataType, AutoIncrement, CreatedAt, DeletedAt } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, DataType, AutoIncrement, CreatedAt, DeletedAt, UpdatedAt } from 'sequelize-typescript';
 
-@Table({ tableName: 'USERS', timestamps: false })
+@Table({ tableName: 'USERS', paranoid: true, timestamps: true })
 export class User extends Model {
   @PrimaryKey
   @AutoIncrement
@@ -21,6 +21,9 @@ export class User extends Model {
 
   @Column
   password!: string;
+
+  @UpdatedAt
+  updated!: Date;
 
   @DeletedAt
   deleted!: Date;

@@ -1,7 +1,7 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement, CreatedAt } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { User } from './User';
 
-@Table({ tableName: 'LOGIN_ATTEMPTS', timestamps: false })
+@Table({ tableName: 'LOGIN_ATTEMPTS', timestamps: true })
 export class LoginAttempt extends Model {
   @PrimaryKey
   @AutoIncrement
@@ -11,6 +11,9 @@ export class LoginAttempt extends Model {
   @CreatedAt
   @Column({field: 'login_date', type: DataType.DATE})
   loginDate!: Date;
+
+  @UpdatedAt
+  updated!: Date;
 
   @Column({field: 'login_status', type: DataType.STRING})
   loginStatus!: string;
@@ -24,4 +27,6 @@ export class LoginAttempt extends Model {
 
   @BelongsTo(() => User)
   user!: User;
+
+
 }

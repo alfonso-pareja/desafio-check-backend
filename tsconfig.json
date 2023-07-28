@@ -10,9 +10,11 @@
     "baseUrl": ".",
     "sourceMap": true,
     "allowJs": false,
+    "incremental": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"]
   },
   "exclude": ["node_modules","build"],
   "types": [ "typePatches" ]

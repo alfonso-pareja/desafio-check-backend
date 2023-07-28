@@ -1,8 +1,9 @@
 import { Sequelize } from 'sequelize-typescript';
-import { User } from './models/User';
-import { Account } from './models/Account';
-import { LoginAttempt } from './models/LoginAttempt';
-import { Transaction } from './models/Transaction';
+import { User } from '../models/User';
+import { Account } from '../models/Account';
+import { LoginAttempt } from '../models/LoginAttempt';
+import { Transaction } from '../models/Transaction';
+import { Recipient } from '../models/Recipient';
 
 let sequelize: Sequelize | undefined;
 
@@ -20,7 +21,7 @@ export const connectToDatabase = async () => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    models: [User, Account, LoginAttempt, Transaction],
+    models: [User, Account, Transaction, LoginAttempt, Recipient],
   });
 
   try {

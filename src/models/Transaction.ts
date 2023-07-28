@@ -1,11 +1,11 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement, CreatedAt } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Account } from './Account';
 
-@Table({ tableName: 'TRANSACTIONS', timestamps: false })
+@Table({ tableName: 'TRANSACTIONS', timestamps: true })
 export class Transaction extends Model {
   @PrimaryKey
   @AutoIncrement
-  @Column({field: 'transaction_id', type: DataType.INTEGER})
+  @Column({field: 'transaction_id', type: DataType.INTEGER, autoIncrement: true })
   transactionId!: number;
 
   @ForeignKey(() => Account)
@@ -23,11 +23,17 @@ export class Transaction extends Model {
   receiverAccount!: Account;
 
   @Column
-  amount!: string;
+  amount!: number;
+
+  @Column({field: 'transaction_number', type: DataType.NUMBER})
+  transactionNumber!: number;
 
   @CreatedAt
   @Column({field: 'transaction_date', type: DataType.DATE})
   transactionDate!: Date;
+
+  @UpdatedAt
+  updated!: Date;
 
   @Column({field: 'transaction_type', type: DataType.STRING})
   transactionType!: string;
