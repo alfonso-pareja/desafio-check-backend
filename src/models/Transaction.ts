@@ -25,6 +25,9 @@ export class Transaction extends Model {
   @Column
   amount!: number;
 
+  @Column({ field: 'receiver_account_name', type: DataType.STRING })
+  receiverAccountName!: number;
+
   @Column({field: 'transaction_number', type: DataType.NUMBER})
   transactionNumber!: number;
 

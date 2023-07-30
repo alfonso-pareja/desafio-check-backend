@@ -7,6 +7,12 @@ import { plainToClass } from "class-transformer";
 export class TransactionController {
   static transactionService = new TransactionService();
 
+  /**
+   * Maneja la solicitud para crear una nueva transferencia.
+   * @param req La solicitud HTTP recibida.
+   * @param res La respuesta HTTP a enviar.
+   * @param next La funcion para pasar al siguiente middleware en caso de error.
+   */
   static async createTransaction(req: Request, res: Response, next: NextFunction) {
     try {
       const transactionData: CreateTransactionDto = plainToClass(CreateTransactionDto, req.body);
@@ -14,11 +20,45 @@ export class TransactionController {
 
       const createdTransaction = await TransactionController.transactionService.createTransaction(transactionData);
 
-      res.status(201).json({
+      res.status(200).json({
         status: "OK",
-        statusCode: 201,
+        statusCode: 200,
         message: "Transferencia creada exitosamente.",
         data: createdTransaction,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  /**
+   * Maneja la solicitud para obtener todas las transacciones asociadas a una cuenta por su ID.
+   * @param req La solicitud HTTP recibida.
+   * @param res La respuesta HTTP a enviar.
+   * @param next La funcion para pasar al siguiente middleware en caso de error.
+   */
+  static async getTransactionsByAccountId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const accountId = parseInt(req.params.accountId, 10);
+      const limitItems = req.query.limit || 100;
+
+      // Verificar si el ID de la cuenta es valido
+      if (isNaN(accountId)) {
+        res.json({
+          status: "error",
+          statusCode: 200,
+          message: "ID de cuenta inválido.",
+          data: [],
+        });
+      }
+
+      const transactions = await TransactionController.transactionService.getTransactionsByAccountId(accountId, Number(limitItems));
+
+      res.json({
+        status: "OK",
+        statusCode: 200,
+        message: "Transacciones obtenidas exitosamente.",
+        data: transactions,
       });
     } catch (err) {
       next(err);

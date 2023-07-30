@@ -2,16 +2,33 @@ import { CreateUserDto } from "../../src/dtos/CreateUserDto";
 import { Account } from "../../src/models/Account";
 import { User } from "../../src/models/User";
 import { UserService } from "../../src/services/UserService";
+import { Sequelize } from "sequelize-typescript";
 
 describe("UserService", () => {
   let userService: UserService;
+  let sequelizeMock: Sequelize;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    sequelizeMock = new Sequelize({
+      dialect: "sqlite",
+      storage: ":memory:",
+      models: [User, Account],
+    });
+    await sequelizeMock.sync({ force: true });
     userService = new UserService();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await Promise.all([
+      User.truncate({ cascade: true }),
+      Account.truncate({ cascade: true }),
+    ]);
+  });
+
+
+  afterAll(async() => {
     jest.clearAllMocks();
+    await sequelizeMock.close();
   });
 
   describe("createUserAccount", () => {
@@ -26,16 +43,16 @@ describe("UserService", () => {
         repeat_password: "test123"
       };
 
-      // Simular el método findOne del modelo User
+      // Simular el metodo findOne del modelo User
       User.findOne = jest.fn().mockResolvedValue(null)
 
-      // Simular el método create del modelo User
+      // Simular el metodo create del modelo User
       User.create = jest.fn().mockResolvedValue({
         userId: 1,
         ...userData
       });
 
-      // Simular el método create del modelo Account
+      // Simular el metodo create del modelo Account
       Account.create = jest.fn().mockResolvedValue({
         accountId: 1,
         accountNumber: "1234567890",
@@ -45,18 +62,18 @@ describe("UserService", () => {
         userId: 1
       });
 
-      // Llamar al método createUserAccount del servicio
+      // Llamar al metodo createUserAccount del servicio
       const result = await userService.createUserAccount(userData);
 
-      // Verificar que el método User.findOne fue llamado con el email del usuario
+      // Verificar que el metodo User.findOne fue llamado con el email del usuario
       expect(User.findOne).toHaveBeenCalledWith({
         where: { email: userData.email }
       });
 
-      // Verificar que el método User.create fue llamado con los datos del usuario
+      // Verificar que el metodo User.create fue llamado con los datos del usuario
       expect(User.create).toHaveBeenCalledWith(userData);
 
-      // Verificar que el método Account.create fue llamado con los datos de la cuenta
+      // Verificar que el metodo Account.create fue llamado con los datos de la cuenta
       expect(Account.create).toHaveBeenCalledWith({
         accountNumber: expect.any(String),
         balance: 0,

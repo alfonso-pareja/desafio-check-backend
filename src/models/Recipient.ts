@@ -1,7 +1,7 @@
 import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, DataType, AutoIncrement, UpdatedAt, DeletedAt, CreatedAt } from 'sequelize-typescript';
 import { User } from './User';
 
-@Table({ tableName: 'RECIPIENTS', timestamps: true })
+@Table({ tableName: 'RECIPIENTS', paranoid: true, timestamps: true })
 export class Recipient extends Model {
   @PrimaryKey
   @AutoIncrement

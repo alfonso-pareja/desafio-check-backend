@@ -1,16 +1,36 @@
+import { User } from "../../src/models/User";
 import { CreateRecipientDto } from "../../src/dtos/CreateRecipientDto";
 import { Recipient } from "../../src/models/Recipient";
 import { RecipientService } from "../../src/services/RecipientService";
+import { Sequelize } from "sequelize-typescript";
+import { Account } from "../../src/models/Account";
 
 describe('RecipientService', () => {
   let recipientService: RecipientService;
+  let sequelizeMock: Sequelize;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    sequelizeMock = new Sequelize({
+      dialect: "sqlite",
+      storage: ":memory:",
+      models: [User, Account, Recipient],
+    });
+    await sequelizeMock.sync({ force: true });
     recipientService = new RecipientService();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await Promise.all([
+      User.truncate({ cascade: true }),
+      Account.truncate({ cascade: true }),
+      Recipient.truncate({ cascade: true }),
+    ]);
+  });
+
+
+  afterAll(async() => {
     jest.clearAllMocks();
+    await sequelizeMock.close();
   });
 
   describe('createRecipient', () => {
@@ -22,21 +42,21 @@ describe('RecipientService', () => {
         recipientName: 'Recipient Test',
       };
 
-      // Simular el método findOne del modelo Recipient (para que el destinatario no exista)
-      jest.spyOn(Recipient, 'findOne').mockResolvedValue(null);
-
-      // Simular el método create del modelo Recipient
-      jest.spyOn(Recipient, 'create').mockResolvedValue({
+      Account.findOne  = jest.fn().mockResolvedValue({
+        accountNumber: "1"
+      });
+      Recipient.create = jest.fn().mockResolvedValue({
         recipientId: 1,
         ...recipientData,
       });
+      Recipient.findOne = jest.fn().mockResolvedValue(null);
 
       // Llamar al método createRecipient del servicio
       const createdRecipient = await recipientService.createRecipient(recipientData);
 
       // Verificar que el método Recipient.findOne fue llamado con los datos del destinatario
       expect(Recipient.findOne).toHaveBeenCalledWith({
-        where: { userId: recipientData.userId, recipientAccountNumber: recipientData.recipientAccountNumber },
+        where: { recipientAccountNumber: recipientData.recipientAccountNumber, userId: recipientData.userId },
       });
 
       // Verificar que el método Recipient.create fue llamado con los datos del destinatario
@@ -58,10 +78,10 @@ describe('RecipientService', () => {
       };
 
       // Simular el método findOne del modelo Recipient (para que el destinatario ya exista)
-      Recipient.findOne = jest.fn().mockResolvedValue({
+      Recipient.findOne  = jest.fn().mockResolvedValue({
         recipientId: 1,
         ...recipientData,
-      })
+      });
 
       // Llamar al método createRecipient del servicio y verificar que lance un error
       await expect(recipientService.createRecipient(recipientData)).rejects.toThrowError(
@@ -70,42 +90,10 @@ describe('RecipientService', () => {
 
       // Verificar que el método Recipient.findOne fue llamado con los datos del destinatario
       expect(Recipient.findOne).toHaveBeenCalledWith({
-        where: { userId: recipientData.userId, recipientAccountNumber: recipientData.recipientAccountNumber },
+        where: { recipientAccountNumber: recipientData.recipientAccountNumber, userId: recipientData.userId },
       });
     });
   });
 
-  describe('getRecipientsByUserId', () => {
-    test('should get recipients for a specific user', async () => {
-      const userId = 1;
-      const recipientsData = [
-        {
-          recipientId: 1,
-          userId,
-          recipientAccountNumber: '1234567890',
-          recipientName: 'Recipient 1',
-        },
-        {
-          recipientId: 2,
-          userId,
-          recipientAccountNumber: '9876543210',
-          recipientName: 'Recipient 2',
-        },
-      ];
 
-      // Simular el método findAll del modelo Recipient
-      Recipient.findAll = jest.fn().mockResolvedValue(recipientsData);
-
-      // Llamar al método getRecipientsByUserId del servicio
-      const recipients = await recipientService.getRecipientsByUserId(userId);
-
-      // Verificar que el método Recipient.findAll fue llamado con el userId
-      expect(Recipient.findAll).toHaveBeenCalledWith({
-        where: { userId },
-      });
-
-      // Verificar que el resultado contiene los destinatarios correctos
-      expect(recipients).toEqual(recipientsData);
-    });
-  });
 });

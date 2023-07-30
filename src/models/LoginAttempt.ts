@@ -21,6 +21,9 @@ export class LoginAttempt extends Model {
   @Column({field: 'login_ip', type: DataType.STRING})
   loginIp!: string;
 
+  @Column
+  token!: string;
+
   @ForeignKey(() => User)
   @Column({field: 'user_id', type: DataType.INTEGER})
   userId!: number;

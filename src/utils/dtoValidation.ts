@@ -7,6 +7,6 @@ export async function validateDto<T extends object>(dtoInstance: T): Promise<voi
     const errorMessages = errors
       .map((error) => Object.values(error.constraints || {}))
       .join(" ");
-    throw ({ code: 400, message: errorMessages });
+    throw ({ code: 200, message: errorMessages });
   }
 }

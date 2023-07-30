@@ -5,7 +5,7 @@
     "main": "index.ts",
     "scripts": {
         "start": "serverless offline --reloadHandler",
-        "test": "jest"
+        "test": "jest --testPathPattern"
     },
     "repository": {
         "type": "git",
@@ -44,6 +44,7 @@
         "sequelize-typescript": "^2.1.5",
         "serverless-offline": "^12.0.4",
         "source-map-support": "^0.5.21",
+        "sqlite3": "^5.1.6",
         "ts-loader": "^9.4.4"
     }
 }

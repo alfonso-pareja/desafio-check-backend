@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumberString } from "class-validator";
 
 export class CreateTransactionDto {
+
   @IsNotEmpty({ message: 'El senderId es requerido.' })
   senderAccountNumber: string;
 
