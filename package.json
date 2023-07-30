@@ -5,7 +5,7 @@
     "main": "index.ts",
     "scripts": {
         "start": "serverless offline --reloadHandler",
-        "test": "jest --testPathPattern"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
