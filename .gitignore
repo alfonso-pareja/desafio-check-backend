@@ -4,6 +4,7 @@
 
 # Directorio de compilación
 .build
+.serverless
 
 # Editor directories and files
 .vscode

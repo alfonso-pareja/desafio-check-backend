@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.ts",
     "scripts": {
-        "start": "serverless offline --reloadHandler",
+        "start": "serverless offline",
+        "start:reload": "serverless offline --reloadHandler",
         "test": "jest"
     },
     "repository": {
@@ -22,14 +23,15 @@
         "@types/express": "^4.17.17",
         "@types/jest": "^29.5.3",
         "@types/node": "^20.4.5",
-        "pg-hstore": "^2.3.4",
         "serverless-dotenv-plugin": "^6.0.0",
         "serverless-plugin-typescript": "^2.1.5",
         "supertest": "^6.3.3",
         "ts-jest": "^29.1.1",
-        "typescript": "^5.1.6"
-    },
-    "dependencies": {
+        "typescript": "^5.1.6",
+        "sqlite3": "^5.1.6",
+        "serverless-offline": "^12.0.4"
+      },
+      "dependencies": {
         "aws-serverless-express": "^3.4.0",
         "bcrypt": "^5.1.0",
         "class-transformer": "^0.5.1",
@@ -42,9 +44,8 @@
         "reflect-metadata": "^0.1.13",
         "sequelize": "^6.32.1",
         "sequelize-typescript": "^2.1.5",
-        "serverless-offline": "^12.0.4",
         "source-map-support": "^0.5.21",
-        "sqlite3": "^5.1.6",
         "ts-loader": "^9.4.4"
-    }
+      }
+      
 }

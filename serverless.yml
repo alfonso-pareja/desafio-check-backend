@@ -21,6 +21,7 @@ provider:
     DB_PASSWORD: ${env:DB_PASSWORD}
     DB_NAME: ${env:DB_NAME}
 
+
 functions:
   app:
     handler: src/lambda.handler
@@ -28,17 +29,15 @@ functions:
       - http:
           method: any
           path: /{any+}
-          cors: true
+          cors: 
+            origin: '*'
+            headers:
+              - '*'
+            allowCredentials: false
 
 custom:
   serverless-offline:
     httpPort: 3000
     useChildProcesses: true
 
-  cors-headers:
-    origin: '*'
-    headers:
-      - Content-Type
-      - Access-Control-Allow-Headers
-      - Access-Control-Allow-Origin
-    allowCredentials: false
+
