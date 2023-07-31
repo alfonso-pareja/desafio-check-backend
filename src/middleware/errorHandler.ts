@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ValidationError } from "class-validator";
+import { DEFAULT_HEADERS } from '../utils/constants';
 
 /**
  * Middleware para manejar errores.
@@ -22,14 +23,14 @@ export function errorHandler(
   // entonces construimos un objeto con los mensajes de error para retornarlos en la respuesta.
   if (err instanceof ValidationError) {
     const validationErrors = getValidationErrors(err);
-    res.status(200).json({
+    res.set(DEFAULT_HEADERS).status(200).json({
       status: "error",
       statusCode: 200,
       message: "Validation Error",
       errors: validationErrors,
     });
   } else {
-    res.status(200).json({
+    res.set(DEFAULT_HEADERS).status(200).json({
       status: err.status || "error",
       statusCode: 200,
       message: message,

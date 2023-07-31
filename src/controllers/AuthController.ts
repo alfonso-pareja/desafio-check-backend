@@ -3,6 +3,7 @@ import { LoginDto } from "../dtos/LoginDto";
 import { AuthService } from "../services/AuthService";
 import { validateDto } from "../utils/dtoValidation";
 import { plainToClass } from "class-transformer";
+import { DEFAULT_HEADERS } from '../utils/constants';
 
 export class AuthController {
   static authService = new AuthService();
@@ -22,7 +23,7 @@ export class AuthController {
       const { password, deleted, ..._user } = user;
       const { accountNumber, accountType, bank, balance, accountId } = account;
 
-      res.status(200).json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: "Inicio de sesión exitoso.",

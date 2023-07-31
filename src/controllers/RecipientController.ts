@@ -3,7 +3,7 @@ import { CreateRecipientDto } from "../dtos/CreateRecipientDto";
 import { RecipientService } from "../services/RecipientService";
 import { plainToClass } from "class-transformer";
 import { validateDto } from "../utils/dtoValidation";
-
+import { DEFAULT_HEADERS } from '../utils/constants';
 
 export class RecipientController {
   static recipientService = new RecipientService();
@@ -22,7 +22,7 @@ export class RecipientController {
       const createdRecipient = await RecipientController.recipientService.createRecipient(recipientData);
 
 
-      res.status(201).json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 201,
         message: "Destinatario creado exitosamente.",
@@ -44,7 +44,7 @@ export class RecipientController {
       const userId = parseInt(req.params.userId, 10);
       const recipients = await RecipientController.recipientService.getRecipientsByUserId(userId);
 
-      res.json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: "Destinatarios obtenidos exitosamente.",
@@ -67,7 +67,7 @@ export class RecipientController {
 
       await RecipientController.recipientService.deleteRecipient(recipientId);
 
-      res.json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: "Destinatario eliminado exitosamente.",

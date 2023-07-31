@@ -3,6 +3,7 @@ import { CreateTransactionDto } from "../dtos/CreateTransactionDto";
 import { TransactionService } from "../services/TransactionService";
 import { validateDto } from "../utils/dtoValidation";
 import { plainToClass } from "class-transformer";
+import { DEFAULT_HEADERS } from '../utils/constants';
 
 export class TransactionController {
   static transactionService = new TransactionService();
@@ -20,7 +21,7 @@ export class TransactionController {
 
       const createdTransaction = await TransactionController.transactionService.createTransaction(transactionData);
 
-      res.status(200).json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: "Transferencia creada exitosamente.",
@@ -44,17 +45,12 @@ export class TransactionController {
 
       // Verificar si el ID de la cuenta es valido
       if (isNaN(accountId)) {
-        res.json({
-          status: "error",
-          statusCode: 200,
-          message: "ID de cuenta inválido.",
-          data: [],
-        });
+        throw new Error("ID de cuenta inválido.")
       }
 
       const transactions = await TransactionController.transactionService.getTransactionsByAccountId(accountId, Number(limitItems));
 
-      res.json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: "Transacciones obtenidas exitosamente.",

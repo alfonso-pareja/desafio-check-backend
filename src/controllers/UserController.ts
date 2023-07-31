@@ -3,6 +3,7 @@ import { CreateUserDto } from "../dtos/CreateUserDto";
 import { UserService } from "../services/UserService";
 import { plainToClass } from "class-transformer";
 import { validateDto } from "../utils/dtoValidation";
+import { DEFAULT_HEADERS } from '../utils/constants';
 import bcrypt from "bcrypt";
 
 export class UserController {
@@ -32,7 +33,7 @@ export class UserController {
 
       const userAccount = await UserController.userService.createUserAccount(userData);
 
-      res.status(200).json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: `Usuario ${userAccount.user.name} creado y asociado a la cuenta ${userAccount.account.accountNumber}`,
@@ -55,7 +56,7 @@ export class UserController {
       const { user, accountUser } = await UserController.userService.getUserById(userId);
 
       if (!user) {
-        res.status(200).json({ status: "error", message: "Usuario no encontrado." });
+        res.set(DEFAULT_HEADERS).status(200).json({ status: "error", message: "Usuario no encontrado." });
         return;
       }
 
@@ -63,7 +64,7 @@ export class UserController {
       const { password, deleted, ..._user } = user.dataValues;
       const { accountNumber, accountType, bank, balance, accountId } = accountUser;
 
-      res.status(200).json({
+      res.set(DEFAULT_HEADERS).status(200).json({
         status: "OK",
         statusCode: 200,
         message: "Usuario.",
@@ -90,7 +91,7 @@ export class UserController {
   static async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await UserController.userService.getAllUsers();
-      res.json(users);
+      res.set(DEFAULT_HEADERS).status(200).json(users);
     } catch (err) {
       next(err);
     }
