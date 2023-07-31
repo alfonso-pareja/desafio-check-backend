@@ -29,7 +29,7 @@ npm start
 ## 🧪 Ejecutar pruebas
 Para inciar las pruebas, ejecuta el siguiente comando
 ```sh
-npm start
+npm test
 ```
 
 ## 💻 Tecnologias utilizadas
