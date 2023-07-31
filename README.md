@@ -43,3 +43,5 @@ Este proyecto se ha desarrollado utilizando las siguientes tecnologías:
 
 
 Este proyecto aprovecha una arquitectura serverless, que es altamente escalable gracias a AWS Lambda, que aumenta la capacidad de procesamiento según la demanda. La base de datos utilizada es MySQL, alojada en el servicio RDS de AWS.
+
+Los servicios se encuentran expuestos en la siguiente URL **https://104xqkgd63.execute-api.us-east-1.amazonaws.com/dev/**
